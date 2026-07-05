@@ -39,8 +39,22 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{color:var(--text);font-family:var(--mono);line-height:1.6;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    /* layered base: deep vertical wash + two off-center ambient pools over the base tone */
+    background:
+      radial-gradient(1100px 620px at 82% -8%,rgba(59,228,123,.06),transparent 55%),
+      radial-gradient(900px 700px at 8% 12%,rgba(28,107,62,.10),transparent 60%),
+      linear-gradient(180deg,#0B0F0C 0%,var(--bg) 42%,#080B09 100%);
+    background-attachment:fixed}
+  /* faint terminal grid, masked to fade toward the edges so it never reads as a hard net */
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      linear-gradient(rgba(59,228,123,.035) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(59,228,123,.035) 1px,transparent 1px);
+    background-size:44px 44px;
+    -webkit-mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 72%);
+    mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 72%);opacity:.6}
   .grad{color:var(--accent)}
   /* phosphor bloom — the ONE surviving gradient, reserved for the terminal's "morfed" word */
   .bloom{background:linear-gradient(90deg,var(--accent),var(--accent-brt));
@@ -49,9 +63,9 @@
   .wrap{max-width:960px;margin:0 auto;padding:0 24px}
   a{color:inherit;text-decoration:none}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
-  body::before{content:"";position:fixed;top:-30%;left:50%;transform:translateX(-50%);
-    width:900px;height:600px;border-radius:50%;pointer-events:none;z-index:0;
-    background:radial-gradient(circle,var(--accent-glow),transparent 60%);filter:blur(40px)}
+  body::before{content:"";position:fixed;top:-34%;left:50%;transform:translateX(-50%);
+    width:820px;height:560px;border-radius:50%;pointer-events:none;z-index:0;
+    background:radial-gradient(circle,var(--accent-glow),transparent 62%);filter:blur(48px);opacity:.85}
 
   nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
     background:rgba(10,12,16,.72);border-bottom:1px solid transparent;transition:.2s}
@@ -108,6 +122,13 @@
 
   section{position:relative;z-index:1;padding:66px 0}
   .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px}
+  /* section eyebrows read as already-executed terminal commands, not marketing labels */
+  .eyebrow-cmd{font-family:var(--mono);font-size:12.5px;letter-spacing:0;text-transform:none;
+    color:var(--text-dim);margin-top:28px;margin-bottom:14px;white-space:nowrap;overflow-x:auto;
+    -ms-overflow-style:none;scrollbar-width:none}
+  .eyebrow-cmd::-webkit-scrollbar{display:none}
+  .eyebrow-cmd .prompt{color:var(--accent);margin-right:.5ch}
+  .eyebrow-cmd .flag{color:var(--text-faint)}
   h2{font-size:clamp(1.5rem,3.4vw,1.9rem);font-weight:700;letter-spacing:-.02em;margin-bottom:16px}
   .lead{font-family:var(--sans);color:var(--text-dim);max-width:640px;font-size:1.05rem}
   .divider{height:1px;background:var(--border);max-width:960px;margin:0 auto}
@@ -329,8 +350,9 @@
     <a href="#convert">conversion</a>
     <a href="#how">how it works</a>
     <a href="#compare">compare</a>
+    <a href="#commands">commands</a>
     <a href="#faq">faq</a>
-    <a href="#" class="nav-cta">GitHub &#9733;</a>
+    <a href="https://github.com/romivol/morf-source-code" class="nav-cta" target="_blank" rel="noopener">GitHub &#9733;</a>
   </div>
 </div></nav>
 
@@ -345,10 +367,10 @@
   <h1>one agent,<br><span class="grad">every tool</span><span class="cursor" aria-hidden="true"></span></h1>
   <p class="sub">Write it once. morf converts and installs your agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool — each in its native format.</p>
   <div class="install">
-    <code><span class="prompt">$</span> npx morf install &lt;git-url&gt;</code>
+    <code><span class="prompt">$</span> npm i -g @romivol/morf</code>
     <button class="copy" onclick="copyInstall(this)" aria-label="copy install command">copy</button>
   </div>
-  <div><a class="ghlink" href="#">View on GitHub &rarr;</a></div>
+  <div><a class="ghlink" href="https://github.com/romivol/morf-source-code" target="_blank" rel="noopener">View on GitHub &rarr;</a></div>
   <div class="tools-strip">
     <span><i class="d"></i>Claude</span><span><i class="d"></i>Cursor</span><span><i class="d"></i>Kilo</span>
     <span><i class="d"></i>Copilot</span><span><i class="d"></i>Windsurf</span><span><i class="d"></i>OpenCode</span>
@@ -368,12 +390,14 @@
 <div class="divider"></div>
 
 <section class="wrap" id="why">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--why</span></div>
   <h2>Every AI tool speaks its own dialect.</h2>
   <p class="lead">A skill, an agent, a rule &mdash; each tool wants a different shape, a different folder, different frontmatter. Today you copy files around and hand-fix each one, then do it again for the next tool. morf is the translator: one command, converted for every tool you use.</p>
 </section>
 <div class="divider"></div>
 
 <section class="wrap" id="convert">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf diff <span class="flag">--target <span id="baFlag">cursor</span></span></div>
   <h2>The same agent, reshaped for each tool.</h2>
   <p class="lead">Others copy your file as-is and hope it works. morf rewrites the frontmatter, permissions and paths into each tool's own format. Pick a target to see what morf produces:</p>
   <div class="ba-tabs" id="baTabs">
@@ -404,6 +428,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--features</span></div>
   <h2>Built to move between tools.</h2>
   <div class="feat">
     <div class="fcard big"><div class="sl"><span class="sym">✓</span><span class="flag">convert</span><span>rewrites, doesn't copy</span></div><h3>Real format conversion</h3><p>Frontmatter, permissions, event names and paths are rewritten per tool &mdash; the only manager that truly adapts agents.</p></div>
@@ -417,6 +442,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="how">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf install <span class="flag">--verbose</span></div>
   <h2>Clone, parse, convert, route.</h2>
   <p class="lead">morf reads each primitive once, then emits a native version for every target you asked for.</p>
   <div class="flow">
@@ -446,23 +472,24 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="commands">
-  <div class="eyebrow">the cli</div>
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--help</span></div>
   <h2>Simple commands, all the way down.</h2>
   <div class="cmds">
     <div class="cmdrow"><code><span class="p">$</span> morf install &lt;url&gt;</code><button class="copy cmd-copy" data-cmd="morf install <url>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">clone &amp; convert into every detected tool</div></div>
-    <div class="cmdrow"><code><span class="p">$</span> morf search &lt;query&gt;</code><button class="copy cmd-copy" data-cmd="morf search <query>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">find skills &amp; agents in the registry</div></div>
-    <div class="cmdrow"><code><span class="p">$</span> morf list</code><button class="copy cmd-copy" data-cmd="morf list" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">see what's installed, in every tool</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf install &lt;repo&gt; --agent &lt;name&gt; --target claude</code><button class="copy cmd-copy" data-cmd="morf install <repo> --agent <name> --target claude" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">install one agent into Claude</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf install &lt;repo&gt; --skill &lt;name&gt; --target cursor</code><button class="copy cmd-copy" data-cmd="morf install <repo> --skill <name> --target cursor" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">install one skill into Cursor</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf list --all</code><button class="copy cmd-copy" data-cmd="morf list --all" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">see what's installed, in every tool</div></div>
     <div class="cmdrow"><code><span class="p">$</span> morf update --all</code><button class="copy cmd-copy" data-cmd="morf update --all" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">pull latest for everything you installed</div></div>
-    <div class="cmdrow"><code><span class="p">$</span> morf publish</code><button class="copy cmd-copy" data-cmd="morf publish" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">register your repo to the marketplace</div></div>
     <div class="cmdrow"><code><span class="p">$</span> morf config default &lt;tool&gt;</code><button class="copy cmd-copy" data-cmd="morf config default <tool>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">set your primary target once</div></div>
   </div>
 </section>
 <div class="divider"></div>
 
 <section class="wrap">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--why switch-tools</span></div>
   <h2>Made for people who switch tools.</h2>
   <div class="cases">
-    <div class="case"><div class="q">"I built a great agent in Claude &mdash; now I want it in Cursor too."</div><div class="a">One command. <span class="wm">morf</span> reshapes its frontmatter and drops it in, correctly.</div></div>
+    <div class="case"><div class="q">"I built a great agent in Claude - now I want it in Cursor too."</div><div class="a">One command. <span class="wm">morf</span> reshapes its frontmatter and drops it in, correctly.</div></div>
     <div class="case"><div class="q">"Our team uses three different AI tools and everyone's config drifts."</div><div class="a">Install from one repo to <span class="grad">all tools</span> &mdash; the same source, converted for each.</div></div>
     <div class="case"><div class="q">"I keep a personal library of skills and rules I reuse everywhere."</div><div class="a">Keep them in one git repo. <span class="wm">morf</span> installs them anywhere in seconds.</div></div>
   </div>
@@ -470,6 +497,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="compare">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--compare</span></div>
   <h2>One command. Every tool. Every primitive.</h2>
   <div class="tblwrap">
   <table class="tbl">
@@ -486,18 +514,8 @@ errors and edge cases&hellip;</pre>
 </section>
 <div class="divider"></div>
 
-<section class="wrap" id="start">
-  <h2>Running in three commands.</h2>
-  <div class="steps">
-    <div class="step"><code><span class="p">$</span> npx morf install &lt;git-url&gt;</code><span class="desc">clone &amp; convert into every detected tool</span></div>
-    <div class="step"><code><span class="p">$</span> morf config default &lt;tool&gt;</code><span class="desc">set your primary target once</span></div>
-    <div class="step"><code><span class="p">$</span> morf list</code><span class="desc">see what's installed, everywhere</span></div>
-  </div>
-</section>
-<div class="divider"></div>
-
 <section class="wrap" id="faq">
-  <div class="eyebrow">questions</div>
+  <div class="eyebrow-cmd"><span class="prompt">$</span> man morf <span class="flag">--faq</span></div>
   <h2>Good to know.</h2>
   <div class="faq">
     <details><summary>Does morf change my original files?</summary><p>No. morf reads your source repo and writes converted copies into each tool's directory. Your source is never modified.</p></details>
@@ -505,12 +523,13 @@ errors and edge cases&hellip;</pre>
     <details><summary>Do I need a manifest or config file?</summary><p>No. <code>morf install &lt;url&gt;</code> works with zero config. A default target and optional manifest exist for convenience, but nothing is required to start.</p></details>
     <details><summary>Which git hosts work?</summary><p>Any. GitHub, GitLab, self-hosted &mdash; public or private. Install by full URL, or by short name once a repo is in the registry.</p></details>
     <details><summary>Will it overwrite something I edited locally?</summary><p>No. If morf detects local changes to an installed item, it skips it and tells you to re-run with <code>--force</code> if you really want to overwrite.</p></details>
-    <details><summary>Is it really free?</summary><p>Yes &mdash; open source, MIT licensed, zero runtime dependencies. Use it, fork it, contribute back.</p></details>
+    <details><summary>What happens when a repo updates?</summary><p>Re-run <code>morf install &lt;url&gt;</code> to pull the latest version. morf updates installed items in place, skips anything you've edited locally, and leaves everything else untouched.</p></details>
   </div>
 </section>
 <div class="divider"></div>
 
 <section class="wrap" id="roadmap">
+  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--roadmap</span></div>
   <h2>Where morf is headed.</h2>
   <div class="road">
     <div class="ritem"><span class="rtag done">shipped</span><span class="txt">Skills + agents conversion for Claude, OpenCode &amp; Kilo</span></div>
@@ -524,7 +543,7 @@ errors and edge cases&hellip;</pre>
 <div class="cta">
   <h2>Write once. <span class="wm">morf</span> <span class="grad">it everywhere.</span></h2>
   <div class="install" style="display:inline-flex">
-    <code><span class="prompt">$</span> npx morf install &lt;git-url&gt;</code>
+    <code><span class="prompt">$</span> npm i -g @romivol/morf</code>
     <button class="copy" onclick="copyInstall(this)" aria-label="copy install command">copy</button>
   </div>
 </div>
@@ -535,14 +554,14 @@ errors and edge cases&hellip;</pre>
     <rect x="36" y="6" width="30" height="30" rx="8" fill="#3BE47B" opacity=".68"/>
     <rect x="72" y="6" width="30" height="30" rx="13" fill="#3BE47B" opacity=".85"/>
     <circle cx="135" cy="21" r="15" fill="#3BE47B"/></svg>
-  <div class="foot-links"><a href="#">GitHub</a><a href="#">LinkedIn</a><a href="#">npm</a></div>
-  <div>Built by <span class="ph">[ your name ]</span> &middot; open source &middot; MIT</div>
+  <div class="foot-links"><a href="https://github.com/romivol/morf-source-code" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/romi-volkovich-bb02b3334" target="_blank" rel="noopener">LinkedIn</a><a href="#">npm</a></div>
+  <div>Built by <span class="ph">Romi Volkovich</span> &middot; open source &middot; MIT</div>
   <div style="margin-top:6px;color:var(--text-faint)">built for people who use more than one AI tool.</div>
 </footer>
 
 <script>
   function copyInstall(btn){
-    navigator.clipboard && navigator.clipboard.writeText('npx morf install <git-url>');
+    navigator.clipboard && navigator.clipboard.writeText('npm i -g @romivol/morf');
     var t=btn.textContent; btn.textContent='copied ✓'; setTimeout(function(){btn.textContent=t;},1400);
   }
   function copyCmd(btn){
@@ -603,7 +622,8 @@ errors and edge cases&hellip;</pre>
     copilot:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="c"># tools mapped to</span>\n<span class="c"># copilot capabilities</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ .github/agents/bug-finder.md</span>'
   };
   var baOut=document.getElementById('baOut'), baWho=document.getElementById('baWho');
-  function setBA(t){baOut.innerHTML=outs[t];baWho.textContent=t;
+  var baFlag=document.getElementById('baFlag');
+  function setBA(t){baOut.innerHTML=outs[t];baWho.textContent=t;if(baFlag)baFlag.textContent=t;
     var tabs=document.querySelectorAll('.ba-tab');for(var i=0;i<tabs.length;i++){tabs[i].classList.toggle('active',tabs[i].dataset.t===t);}}
   document.getElementById('baTabs').addEventListener('click',function(e){var b=e.target.closest('.ba-tab');if(b)setBA(b.dataset.t);});
   setBA('cursor');
