@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>morf — one agent, every tool</title>
-<meta name="description" content="morf installs AI agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool at once — converting each into its native format.">
+<title>morf - one agent, every tool</title>
+<meta name="description" content="morf installs AI agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool at once - converting each into its native format.">
 <meta name="theme-color" content="#0A0D0B">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='14' fill='%230A0D0B'/%3E%3Crect x='12' y='12' width='36' height='36' rx='12' fill='%233BE47B'/%3E%3C/svg%3E">
 <link rel="canonical" href="https://morf.dev/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://morf.dev/">
 <meta property="og:site_name" content="morf">
-<meta property="og:title" content="morf — one agent, every tool">
-<meta property="og:description" content="Write it once. morf converts and installs your agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool — each in its native format.">
+<meta property="og:title" content="morf - one agent, every tool">
+<meta property="og:description" content="Write it once. morf converts and installs your agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool - each in its native format.">
 <meta property="og:image" content="https://morf.dev/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="morf — one agent, every tool">
+<meta property="og:image:alt" content="morf - one agent, every tool">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="morf — one agent, every tool">
+<meta name="twitter:title" content="morf - one agent, every tool">
 <meta name="twitter:description" content="One agent, every tool. morf converts AI coding primitives into each tool's native format.">
 <meta name="twitter:image" content="https://morf.dev/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"morf","applicationCategory":"DeveloperApplication","operatingSystem":"Node.js >= 18","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Open-source CLI that installs AI agent primitives from any git repo into every AI coding tool at once — converting each into the tool's native format.","license":"https://opensource.org/licenses/MIT"}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"morf","applicationCategory":"DeveloperApplication","operatingSystem":"Node.js >= 18","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Open-source CLI that installs AI agent primitives from any git repo into every AI coding tool at once - converting each into the tool's native format.","license":"https://opensource.org/licenses/MIT"}
 </script>
 <style>
   :root{
@@ -56,7 +56,7 @@
     -webkit-mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 72%);
     mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 72%);opacity:.6}
   .grad{color:var(--accent)}
-  /* phosphor bloom — the ONE surviving gradient, reserved for the terminal's "morfed" word */
+  /* phosphor bloom - the ONE surviving gradient, reserved for the terminal's "morfed" word */
   .bloom{background:linear-gradient(90deg,var(--accent),var(--accent-brt));
     -webkit-background-clip:text;background-clip:text;color:transparent;
     text-shadow:0 0 18px rgba(59,228,123,.35)}
@@ -128,12 +128,13 @@
     -ms-overflow-style:none;scrollbar-width:none}
   .eyebrow-cmd::-webkit-scrollbar{display:none}
   .eyebrow-cmd .prompt{color:var(--accent);margin-right:.5ch}
+  .eyebrow-cmd .hash{color:var(--accent);margin-right:.5ch}
   .eyebrow-cmd .flag{color:var(--text-faint)}
   h2{font-size:clamp(1.5rem,3.4vw,1.9rem);font-weight:700;letter-spacing:-.02em;margin-bottom:16px}
   .lead{font-family:var(--sans);color:var(--text-dim);max-width:640px;font-size:1.05rem}
   .divider{height:1px;background:var(--border);max-width:960px;margin:0 auto}
 
-  /* asymmetric on purpose — the OUTPUT is the point, so it's wider + brighter than the source */
+  /* asymmetric on purpose - the OUTPUT is the point, so it's wider + brighter than the source */
   .ba{display:grid;grid-template-columns:0.82fr auto 1.28fr;gap:18px;align-items:center;margin-top:30px}
   .ba-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
   .ba-card.src{opacity:.62}
@@ -160,7 +161,7 @@
   .fcard.wide .sl{margin-bottom:0}
   .fcard.wide h3{margin-bottom:0;white-space:nowrap}
   .fcard.wide p{flex:1}
-  /* status-line header instead of an icon chip — reads like a line in the terminal */
+  /* status-line header instead of an icon chip - reads like a line in the terminal */
   .fcard .sl{font-family:var(--mono);font-size:13px;margin-bottom:13px;color:var(--text-faint);
     display:flex;align-items:baseline;gap:9px;letter-spacing:.01em}
   .fcard .sl .sym{color:var(--accent);font-size:15px}
@@ -255,7 +256,7 @@
     animation:pop .5s cubic-bezier(.34,1.56,.64,1) forwards, morf-pulse 3.2s ease-in-out infinite;
     animation-delay:.35s,.9s}
   .logo-mark svg rect{opacity:0;animation:pop .5s cubic-bezier(.34,1.56,.64,1) forwards}
-  /* each shape wobbles gently around its OWN baseline roundedness — never converging.
+  /* each shape wobbles gently around its OWN baseline roundedness - never converging.
      staggered delays send a calm caterpillar ripple left → right */
   .logo-mark svg rect:nth-of-type(1){animation:pop .5s cubic-bezier(.34,1.56,.64,1) forwards, morf-1 3.2s ease-in-out infinite;animation-delay:.05s,0s}
   .logo-mark svg rect:nth-of-type(2){animation:pop .5s cubic-bezier(.34,1.56,.64,1) forwards, morf-2 3.2s ease-in-out infinite;animation-delay:.15s,.3s}
@@ -365,7 +366,7 @@
       <circle cx="180" cy="30" r="18" fill="#3BE47B"/></svg>
   </div>
   <h1>one agent,<br><span class="grad">every tool</span><span class="cursor" aria-hidden="true"></span></h1>
-  <p class="sub">Write it once. morf converts and installs your agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool — each in its native format.</p>
+  <p class="sub">Write it once. morf converts and installs your agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool - each in its native format.</p>
   <div class="install">
     <code><span class="prompt">$</span> npm i -g @romivol/morf</code>
     <button class="copy" onclick="copyInstall(this)" aria-label="copy install command">copy</button>
@@ -390,14 +391,14 @@
 <div class="divider"></div>
 
 <section class="wrap" id="why">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--why</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> why</div>
   <h2>Every AI tool speaks its own dialect.</h2>
   <p class="lead">A skill, an agent, a rule &mdash; each tool wants a different shape, a different folder, different frontmatter. Today you copy files around and hand-fix each one, then do it again for the next tool. morf is the translator: one command, converted for every tool you use.</p>
 </section>
 <div class="divider"></div>
 
 <section class="wrap" id="convert">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf diff <span class="flag">--target <span id="baFlag">cursor</span></span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> conversion</div>
   <h2>The same agent, reshaped for each tool.</h2>
   <p class="lead">Others copy your file as-is and hope it works. morf rewrites the frontmatter, permissions and paths into each tool's own format. Pick a target to see what morf produces:</p>
   <div class="ba-tabs" id="baTabs">
@@ -428,21 +429,21 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--features</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> features</div>
   <h2>Built to move between tools.</h2>
   <div class="feat">
     <div class="fcard big"><div class="sl"><span class="sym">✓</span><span class="flag">convert</span><span>rewrites, doesn't copy</span></div><h3>Real format conversion</h3><p>Frontmatter, permissions, event names and paths are rewritten per tool &mdash; the only manager that truly adapts agents.</p></div>
     <div class="fcard big"><div class="sl"><span class="sym">✓</span><span class="flag">primitives</span><span>skills · agents · rules · prompts · hooks · mcp</span></div><h3>Every primitive</h3><p>Not just rules, not just skills &mdash; all of it, each written to the shape its tool expects.</p></div>
     <div class="fcard"><div class="sl"><span class="sym">↝</span><span class="flag">targets</span></div><h3>Every major tool</h3><p>Claude, Cursor, Kilo, Copilot, Windsurf and OpenCode &mdash; install to one, several, or all at once.</p></div>
     <div class="fcard"><div class="sl"><span class="sym">±</span><span class="flag">no-config</span></div><h3>Zero config</h3><p>No manifest to learn. <code>morf install &lt;url&gt;</code> and you're done. A manifest is optional, never required.</p></div>
-    <div class="fcard"><div class="sl"><span class="sym">↝</span><span class="flag">any-host</span></div><h3>Any git host</h3><p>GitHub, GitLab, or any git URL &mdash; public or private. Install by URL or short name.</p></div>
+    <div class="fcard"><div class="sl"><span class="sym">⎇</span><span class="flag">any-host</span></div><h3>Any git host</h3><p>GitHub, GitLab, or any git URL &mdash; public or private. Install by URL or short name.</p></div>
     <div class="fcard wide"><div class="sl"><span class="sym">✓</span><span class="flag">MIT</span></div><h3>Open source</h3><p>Zero runtime dependencies. Auditable, forkable, and yours.</p></div>
   </div>
 </section>
 <div class="divider"></div>
 
 <section class="wrap" id="how">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf install <span class="flag">--verbose</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> how it works</div>
   <h2>Clone, parse, convert, route.</h2>
   <p class="lead">morf reads each primitive once, then emits a native version for every target you asked for.</p>
   <div class="flow">
@@ -472,7 +473,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="commands">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--help</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> commands</div>
   <h2>Simple commands, all the way down.</h2>
   <div class="cmds">
     <div class="cmdrow"><code><span class="p">$</span> morf install &lt;url&gt;</code><button class="copy cmd-copy" data-cmd="morf install <url>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">clone &amp; convert into every detected tool</div></div>
@@ -486,7 +487,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--why switch-tools</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> who it's for</div>
   <h2>Made for people who switch tools.</h2>
   <div class="cases">
     <div class="case"><div class="q">"I built a great agent in Claude - now I want it in Cursor too."</div><div class="a">One command. <span class="wm">morf</span> reshapes its frontmatter and drops it in, correctly.</div></div>
@@ -497,7 +498,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="compare">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--compare</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> comparison</div>
   <h2>One command. Every tool. Every primitive.</h2>
   <div class="tblwrap">
   <table class="tbl">
@@ -515,7 +516,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="faq">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> man morf <span class="flag">--faq</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> faq</div>
   <h2>Good to know.</h2>
   <div class="faq">
     <details><summary>Does morf change my original files?</summary><p>No. morf reads your source repo and writes converted copies into each tool's directory. Your source is never modified.</p></details>
@@ -529,7 +530,7 @@ errors and edge cases&hellip;</pre>
 <div class="divider"></div>
 
 <section class="wrap" id="roadmap">
-  <div class="eyebrow-cmd"><span class="prompt">$</span> morf <span class="flag">--roadmap</span></div>
+  <div class="eyebrow-cmd"><span class="hash">#</span> roadmap</div>
   <h2>Where morf is headed.</h2>
   <div class="road">
     <div class="ritem"><span class="rtag done">shipped</span><span class="txt">Skills + agents conversion for Claude, OpenCode &amp; Kilo</span></div>
@@ -600,7 +601,7 @@ errors and edge cases&hellip;</pre>
     document.querySelectorAll('.reveal,.feat,.cases').forEach(function(el){revObs.observe(el);});
   }
 
-  // scrollspy — highlight active nav link
+  // scrollspy - highlight active nav link
   var links={};
   document.querySelectorAll('.nav-links a:not(.nav-cta)').forEach(function(a){links[a.getAttribute('href')]=a;});
   var ids=['convert','how','compare','faq'];
