@@ -23,7 +23,7 @@
 <meta name="twitter:image" content="https://morf.dev/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"morf","applicationCategory":"DeveloperApplication","operatingSystem":"Node.js >= 18","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Open-source CLI that installs AI agent primitives from any git repo into every AI coding tool at once - converting each into the tool's native format.","license":"https://opensource.org/licenses/MIT"}
 </script>
@@ -115,6 +115,9 @@
   /* --- morf wordmark: used ONLY for the product name, never for other emphasis --- */
   .wm{font-family:var(--mono);font-weight:800;letter-spacing:.01em;color:var(--accent);
     text-shadow:0 0 14px rgba(59,228,123,.28)}
+  /* Space Grotesk wordmark: reserved for the nav brand + closing CTA */
+  .wm.mc{font-family:'Space Grotesk',var(--sans);font-weight:700;letter-spacing:-.01em;
+    text-transform:lowercase}
   /* the cursor block appears once, on the hero wordmark, so morf reads as a live prompt */
   .wm.cur::after{content:"";display:inline-block;width:.46em;height:.92em;margin-left:.14em;
     background:var(--accent);vertical-align:-.06em;box-shadow:0 0 9px rgba(59,228,123,.6);
@@ -344,7 +347,7 @@
       <rect x="36" y="6" width="30" height="30" rx="8" fill="#3BE47B" opacity=".68"/>
       <rect x="72" y="6" width="30" height="30" rx="13" fill="#3BE47B" opacity=".85"/>
       <circle cx="135" cy="21" r="15" fill="#3BE47B"/></svg>
-    <span class="wm">morf</span>
+    <span class="wm mc">morf</span>
   </a>
   <button class="menu-btn" id="menuBtn" aria-label="toggle menu" aria-expanded="false">≡</button>
   <div class="nav-links" id="navLinks">
@@ -542,7 +545,7 @@ errors and edge cases&hellip;</pre>
 </section>
 
 <div class="cta">
-  <h2>Write once. <span class="wm">morf</span> <span class="grad">it everywhere.</span></h2>
+  <h2>Write once. <span class="wm mc">morf</span> <span class="grad">it everywhere.</span></h2>
   <div class="install" style="display:inline-flex">
     <code><span class="prompt">$</span> npm i -g @romivol/morf</code>
     <button class="copy" onclick="copyInstall(this)" aria-label="copy install command">copy</button>
