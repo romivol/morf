@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>morf — one agent, every tool</title>
+<meta name="description" content="morf installs AI agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool at once — converting each into its native format.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0C10; --bg-elev:#12151C; --bg-card:#0F131A; --border:#1E2430;
+    --text:#E6E9EF; --text-dim:#8B93A3; --text-faint:#5A6172;
+    --grad-a:#7C3AED; --grad-b:#22D3EE;
+    --ok:#27C93F; --warn:#E3B341; --err:#FF5F56;
+    --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',monospace;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--mono);line-height:1.6;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .grad{background:linear-gradient(120deg,var(--grad-a),var(--grad-b));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  a{color:inherit;text-decoration:none}
+  body::before{content:"";position:fixed;top:-30%;left:50%;transform:translateX(-50%);
+    width:900px;height:600px;border-radius:50%;pointer-events:none;z-index:0;
+    background:radial-gradient(circle,rgba(124,58,237,.15),transparent 60%);filter:blur(40px)}
+
+  nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
+    background:rgba(10,12,16,.72);border-bottom:1px solid transparent;transition:.2s}
+  nav.scrolled{border-bottom-color:var(--border)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:960px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.03em}
+  .nav-links{display:flex;gap:24px;font-size:14px;color:var(--text-dim);align-items:center}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{border:1px solid var(--border);padding:7px 14px;border-radius:7px}
+  .nav-cta:hover{border-color:var(--grad-b);color:var(--text)}
+
+  header{position:relative;z-index:1;text-align:center;padding:64px 0 34px}
+  .logo-mark{margin:0 auto 30px;width:210px}
+  h1{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.05}
+  .sub{font-family:var(--sans);color:var(--text-dim);font-size:clamp(1rem,2.2vw,1.18rem);max-width:600px;margin:22px auto 34px}
+  .install{display:inline-flex;align-items:center;gap:14px;background:var(--bg-elev);
+    border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:15px;max-width:100%}
+  .install .prompt{color:var(--grad-b)}
+  .copy{background:transparent;border:1px solid var(--border);color:var(--text-dim);
+    font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .copy:hover{color:var(--text);border-color:var(--grad-b)}
+  .ghlink{display:inline-block;margin-top:22px;font-size:14px;color:var(--text-dim)}
+  .ghlink:hover{color:var(--text)}
+  .tools-strip{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:34px;font-size:13px;color:var(--text-faint)}
+  .tools-strip span{display:inline-flex;align-items:center;gap:7px}
+  .tools-strip .d{width:6px;height:6px;border-radius:50%;background:linear-gradient(120deg,var(--grad-a),var(--grad-b))}
+
+  .term-sec{position:relative;z-index:1;padding:34px 0 10px}
+  .term{background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(0,0,0,.6)}
+  .term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border)}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .term-title{margin-left:10px;font-size:12px;color:var(--text-faint)}
+  .term-body{padding:20px 22px;font-size:14.5px;min-height:340px;white-space:pre-wrap;word-break:break-word}
+  .term-body .line{display:block;min-height:1.6em}
+  .tok-ok{color:var(--ok)} .tok-warn{color:var(--warn)} .tok-dim{color:var(--text-dim)}
+  .tok-path{color:var(--text-faint)} .cmd{color:var(--text)} .prompt{color:var(--grad-b)}
+  .cursor{display:inline-block;width:9px;height:1.05em;background:var(--grad-b);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .replay{display:block;margin:16px auto 0;background:transparent;border:1px solid var(--border);
+    color:var(--text-dim);font-family:var(--mono);font-size:12px;padding:7px 14px;border-radius:6px;cursor:pointer}
+  .replay:hover{color:var(--text);border-color:var(--grad-b)}
+
+  section{position:relative;z-index:1;padding:66px 0}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px}
+  h2{font-size:clamp(1.5rem,3.4vw,1.9rem);font-weight:700;letter-spacing:-.02em;margin-bottom:16px}
+  .lead{font-family:var(--sans);color:var(--text-dim);max-width:640px;font-size:1.05rem}
+  .divider{height:1px;background:var(--border);max-width:960px;margin:0 auto}
+
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:30px}
+  .ba-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .ba-head{padding:10px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--text-dim);display:flex;justify-content:space-between}
+  .ba-head .who{color:var(--text)}
+  .ba pre{padding:14px;font-size:12.5px;line-height:1.7;overflow-x:auto;color:var(--text-dim)}
+  .ba pre .k{color:var(--grad-b)} .ba pre .v{color:var(--text)} .ba pre .c{color:var(--text-faint)}
+  .ba-arrow{display:flex;align-items:center;justify-content:center;color:var(--grad-b);font-size:22px}
+  .ba-tabs{display:flex;gap:8px;margin-top:26px;flex-wrap:wrap}
+  .ba-tab{border:1px solid var(--border);background:var(--bg-elev);color:var(--text-dim);
+    font-family:var(--mono);font-size:12.5px;padding:6px 13px;border-radius:20px;cursor:pointer;transition:.15s}
+  .ba-tab.active{color:var(--text);border-color:var(--grad-b)}
+  .ba-tab:hover{color:var(--text)}
+
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .fcard{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:22px}
+  .fcard .ic{width:34px;height:34px;border-radius:8px;background:linear-gradient(120deg,rgba(124,58,237,.25),rgba(34,211,238,.15));
+    display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px}
+  .fcard h3{font-size:15px;font-weight:700;margin-bottom:7px}
+  .fcard p{font-family:var(--sans);font-size:13.5px;color:var(--text-dim);line-height:1.55}
+
+  .tblwrap{overflow-x:auto;margin-top:26px}
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  .tbl th,.tbl td{border:1px solid var(--border);padding:11px 12px;text-align:center}
+  .tbl th{color:var(--text-dim);font-weight:500;background:var(--bg-elev)}
+  .tbl td:first-child,.tbl th:first-child{text-align:left;color:var(--text)}
+  .yes{color:var(--ok)} .route{color:var(--grad-b)} .no{color:var(--text-faint)}
+  .row-hi td{background:linear-gradient(90deg,rgba(124,58,237,.10),rgba(34,211,238,.05))}
+  .row-hi td:first-child{font-weight:700}
+  .legend{margin-top:14px;font-size:.85rem;color:var(--text-faint);font-family:var(--sans)}
+
+  .cmds{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+  .cmdrow{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;padding:14px 16px}
+  .cmdrow code{font-size:13.5px;color:var(--text)}
+  .cmdrow code .p{color:var(--grad-b)}
+  .cmdrow .d{font-family:var(--sans);font-size:12.5px;color:var(--text-faint);margin-top:5px}
+
+  .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .case{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:22px}
+  .case .q{font-family:var(--sans);font-style:italic;color:var(--text-dim);font-size:13.5px;margin-bottom:12px;line-height:1.5}
+  .case .a{font-size:13px;color:var(--text)}
+  .case .a .grad{font-weight:700}
+
+  .flow{display:flex;align-items:center;gap:10px;margin-top:30px;flex-wrap:wrap;justify-content:center}
+  .fstep{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-align:center;min-width:120px}
+  .fstep .n{font-size:12px;color:var(--grad-b);font-weight:700}
+  .fstep .t{font-size:14px;margin-top:4px}
+  .fstep .s{font-family:var(--sans);font-size:11.5px;color:var(--text-faint);margin-top:4px}
+  .farrow{color:var(--text-faint);font-size:18px}
+
+  .steps{counter-reset:s;margin-top:28px;display:grid;gap:14px}
+  .step{display:flex;gap:16px;align-items:center;background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+  .step::before{counter-increment:s;content:counter(s);font-weight:800;color:var(--grad-b);font-size:18px;min-width:22px}
+  .step code{font-size:14px}.step code .p{color:var(--grad-b)}
+  .step .desc{font-family:var(--sans);color:var(--text-faint);font-size:13px;margin-left:auto;text-align:right}
+
+  .faq{margin-top:26px;display:grid;gap:12px}
+  details{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:0 18px}
+  summary{cursor:pointer;padding:16px 0;font-size:14.5px;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--grad-b);font-size:18px}
+  details[open] summary::after{content:"\2013"}
+  details p{font-family:var(--sans);font-size:13.5px;color:var(--text-dim);padding:0 0 16px;line-height:1.6}
+
+  .road{margin-top:28px;display:grid;gap:10px}
+  .ritem{display:flex;gap:14px;align-items:baseline;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;padding:13px 16px;font-size:13.5px}
+  .rtag{font-size:11px;padding:2px 9px;border-radius:20px;font-family:var(--mono);white-space:nowrap}
+  .rtag.done{color:var(--ok);border:1px solid rgba(39,201,63,.3)}
+  .rtag.now{color:var(--warn);border:1px solid rgba(227,179,65,.3)}
+  .rtag.next{color:var(--text-faint);border:1px solid var(--border)}
+  .ritem .txt{font-family:var(--sans);color:var(--text-dim)}
+
+  .cta{position:relative;z-index:1;text-align:center;padding:70px 24px;
+    background:linear-gradient(120deg,rgba(124,58,237,.10),rgba(34,211,238,.06));border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .cta h2{margin-bottom:20px}
+
+  footer{position:relative;z-index:1;padding:40px 0 60px;text-align:center;color:var(--text-faint);font-size:13px}
+  footer a{color:var(--text-dim)} footer a:hover{color:var(--text)}
+  footer .ph{color:var(--warn)}
+  .foot-links{display:flex;gap:20px;justify-content:center;margin:14px 0}
+
+  @media(max-width:760px){
+    .feat,.cases{grid-template-columns:1fr}
+    .cmds{grid-template-columns:1fr}
+    .ba{grid-template-columns:1fr}.ba-arrow{transform:rotate(90deg)}
+  }
+  @media(max-width:600px){
+    .nav-links a:not(.nav-cta){display:none}
+    .install{flex-direction:column;align-items:stretch;gap:10px;text-align:left}
+    .step{flex-wrap:wrap}.step .desc{margin-left:0;text-align:left;width:100%}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="nav-in">
+  <div class="brand">
+    <svg width="34" height="26" viewBox="0 0 150 44" aria-label="morf logo">
+      <defs><linearGradient id="n" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+      <rect x="0" y="6" width="30" height="30" rx="2" fill="url(#n)" opacity=".5"/>
+      <rect x="36" y="6" width="30" height="30" rx="8" fill="url(#n)" opacity=".75"/>
+      <rect x="72" y="6" width="30" height="30" rx="13" fill="url(#n)" opacity=".9"/>
+      <circle cx="135" cy="21" r="15" fill="url(#n)"/></svg>
+    <span class="grad">morf</span>
+  </div>
+  <div class="nav-links">
+    <a href="#convert">conversion</a>
+    <a href="#how">how it works</a>
+    <a href="#compare">compare</a>
+    <a href="#faq">faq</a>
+    <a href="#" class="nav-cta">GitHub &#9733;</a>
+  </div>
+</div></nav>
+
+<header class="wrap">
+  <div class="logo-mark">
+    <svg width="100%" viewBox="0 0 210 60" aria-label="morf">
+      <defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+      <rect x="6" y="12" width="36" height="36" rx="3" fill="url(#h)" opacity=".5"/>
+      <rect x="52" y="12" width="36" height="36" rx="10" fill="url(#h)" opacity=".72"/>
+      <rect x="98" y="12" width="36" height="36" rx="15" fill="url(#h)" opacity=".88"/>
+      <circle cx="180" cy="30" r="18" fill="url(#h)"/></svg>
+  </div>
+  <h1>one agent,<br><span class="grad">every tool</span></h1>
+  <p class="sub">Write it once. morf converts and installs your agents, skills, rules, prompts, hooks and MCP servers into every AI coding tool — each in its native format.</p>
+  <div class="install">
+    <code><span class="prompt">$</span> npx morf install &lt;git-url&gt;</code>
+    <button class="copy" onclick="copyInstall(this)">copy</button>
+  </div>
+  <div><a class="ghlink" href="#">View on GitHub &rarr;</a></div>
+  <div class="tools-strip">
+    <span><i class="d"></i>Claude</span><span><i class="d"></i>Cursor</span><span><i class="d"></i>Kilo</span>
+    <span><i class="d"></i>Copilot</span><span><i class="d"></i>Windsurf</span><span><i class="d"></i>OpenCode</span>
+  </div>
+</header>
+
+<div class="term-sec wrap">
+  <div class="term">
+    <div class="term-bar">
+      <span class="dot" style="background:#FF5F56"></span><span class="dot" style="background:#FFBD2E"></span><span class="dot" style="background:#27C93F"></span>
+      <span class="term-title">morf &mdash; install</span>
+    </div>
+    <div class="term-body" id="term"></div>
+  </div>
+  <button class="replay" onclick="playTerm()">&#8635; replay</button>
+</div>
+
+<section class="wrap" id="why">
+  <div class="eyebrow">the problem</div>
+  <h2>Every AI tool speaks its own dialect.</h2>
+  <p class="lead">A skill, an agent, a rule &mdash; each tool wants a different shape, a different folder, different frontmatter. Today you copy files around and hand-fix each one, then do it again for the next tool. morf is the translator: one command, converted for every tool you use.</p>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="convert">
+  <div class="eyebrow">real conversion, not copying</div>
+  <h2>The same agent, reshaped for each tool.</h2>
+  <p class="lead">Others copy your file as-is and hope it works. morf rewrites the frontmatter, permissions and paths into each tool's own format. Pick a target to see what morf produces:</p>
+  <div class="ba-tabs" id="baTabs">
+    <button class="ba-tab active" data-t="cursor">&rarr; cursor</button>
+    <button class="ba-tab" data-t="kilo">&rarr; kilo</button>
+    <button class="ba-tab" data-t="copilot">&rarr; copilot</button>
+  </div>
+  <div class="ba">
+    <div class="ba-card">
+      <div class="ba-head"><span>source</span><span class="who">bug-finder.md</span></div>
+      <pre><span class="c">---</span>
+<span class="k">name</span>: <span class="v">bug-finder</span>
+<span class="k">description</span>: <span class="v">Finds bugs</span>
+<span class="k">tools</span>: <span class="v">[read, grep, bash]</span>
+<span class="k">model</span>: <span class="v">sonnet</span>
+<span class="c">---</span>
+<span class="c"># Bug Finder</span>
+Reviews diffs for logic
+errors and edge cases&hellip;</pre>
+    </div>
+    <div class="ba-arrow">&rarr;</div>
+    <div class="ba-card">
+      <div class="ba-head"><span>morfed &rarr;</span><span class="who" id="baWho">cursor</span></div>
+      <pre id="baOut"></pre>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap">
+  <div class="eyebrow">what you get</div>
+  <h2>Built to move between tools.</h2>
+  <div class="feat">
+    <div class="fcard"><div class="ic">&#8644;</div><h3>Real format conversion</h3><p>Frontmatter, permissions, event names and paths are rewritten per tool &mdash; the only manager that truly adapts agents.</p></div>
+    <div class="fcard"><div class="ic">&#9678;</div><h3>Every major tool</h3><p>Claude, Cursor, Kilo, Copilot, Windsurf and OpenCode &mdash; install to one, several, or all at once.</p></div>
+    <div class="fcard"><div class="ic">&#9636;</div><h3>Every primitive</h3><p>Skills, agents, rules, prompts, hooks and MCP servers. Not just rules, not just skills &mdash; all of it.</p></div>
+    <div class="fcard"><div class="ic">&#9889;</div><h3>Zero config</h3><p>No manifest to learn. <code>morf install &lt;url&gt;</code> and you're done. A manifest is optional, never required.</p></div>
+    <div class="fcard"><div class="ic">&#9741;</div><h3>Any git host</h3><p>GitHub, GitLab, or any git URL &mdash; public or private. Install by URL or by short name from the registry.</p></div>
+    <div class="fcard"><div class="ic">&#9671;</div><h3>Open source</h3><p>MIT licensed, zero runtime dependencies. Auditable, forkable, and yours.</p></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="how">
+  <div class="eyebrow">how it works</div>
+  <h2>Clone, parse, convert, route.</h2>
+  <p class="lead">morf reads each primitive once, then emits a native version for every target you asked for.</p>
+  <div class="flow">
+    <div class="fstep"><div class="n">01</div><div class="t">clone</div><div class="s">fetch the repo</div></div>
+    <div class="farrow">&rarr;</div>
+    <div class="fstep"><div class="n">02</div><div class="t">parse</div><div class="s">read primitives + frontmatter</div></div>
+    <div class="farrow">&rarr;</div>
+    <div class="fstep"><div class="n">03</div><div class="t">convert</div><div class="s">reshape per tool</div></div>
+    <div class="farrow">&rarr;</div>
+    <div class="fstep"><div class="n">04</div><div class="t">route</div><div class="s">write to each native path</div></div>
+  </div>
+  <div class="tblwrap">
+  <table class="tbl">
+    <thead><tr><th>primitive</th><th>claude</th><th>cursor</th><th>kilo</th><th>copilot</th><th>windsurf</th><th>opencode</th></tr></thead>
+    <tbody>
+      <tr><td>Skills</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
+      <tr class="row-hi"><td>Agents</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>Rules</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="route">&#8605;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="route">&#8605;</td></tr>
+      <tr><td>Prompts</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>Hooks</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>MCP</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="legend">&#10003; converted &nbsp;&middot;&nbsp; &#8605; routed &nbsp;&middot;&nbsp; &mdash; not supported by tool</div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="commands">
+  <div class="eyebrow">the cli</div>
+  <h2>Simple commands, all the way down.</h2>
+  <div class="cmds">
+    <div class="cmdrow"><code><span class="p">$</span> morf install &lt;url&gt;</code><div class="d">clone &amp; convert into every detected tool</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf search &lt;query&gt;</code><div class="d">find skills &amp; agents in the registry</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf list</code><div class="d">see what's installed, in every tool</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf update --all</code><div class="d">pull latest for everything you installed</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf publish</code><div class="d">register your repo to the marketplace</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf config default &lt;tool&gt;</code><div class="d">set your primary target once</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap">
+  <div class="eyebrow">who it's for</div>
+  <h2>Made for people who switch tools.</h2>
+  <div class="cases">
+    <div class="case"><div class="q">"I built a great agent in Claude &mdash; now I want it in Cursor too."</div><div class="a">One command. <span class="grad">morf</span> reshapes its frontmatter and drops it in, correctly.</div></div>
+    <div class="case"><div class="q">"Our team uses three different AI tools and everyone's config drifts."</div><div class="a">Install from one repo to <span class="grad">all tools</span> &mdash; the same source, converted for each.</div></div>
+    <div class="case"><div class="q">"I keep a personal library of skills and rules I reuse everywhere."</div><div class="a">Keep them in one git repo. <span class="grad">morf</span> installs them anywhere in seconds.</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="compare">
+  <div class="eyebrow">how it's different</div>
+  <h2>One command. Every tool. Every primitive.</h2>
+  <div class="tblwrap">
+  <table class="tbl">
+    <thead><tr><th></th><th>multi-tool</th><th>converts agents</th><th>all primitives</th><th>zero-config</th><th>any git host</th></tr></thead>
+    <tbody>
+      <tr class="row-hi"><td>morf</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>APM</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>Ruler</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>copy-paste by hand</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="lead" style="margin-top:18px">Ruler does rules. APM does packaging. <span class="grad" style="font-weight:700">morf does all of it</span> &mdash; and it's the only one that actually converts your agents.</p>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="start">
+  <div class="eyebrow">quick start</div>
+  <h2>Running in three commands.</h2>
+  <div class="steps">
+    <div class="step"><code><span class="p">$</span> npx morf install &lt;git-url&gt;</code><span class="desc">clone &amp; convert into every detected tool</span></div>
+    <div class="step"><code><span class="p">$</span> morf config default &lt;tool&gt;</code><span class="desc">set your primary target once</span></div>
+    <div class="step"><code><span class="p">$</span> morf list</code><span class="desc">see what's installed, everywhere</span></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="faq">
+  <div class="eyebrow">questions</div>
+  <h2>Good to know.</h2>
+  <div class="faq">
+    <details><summary>Does morf change my original files?</summary><p>No. morf reads your source repo and writes converted copies into each tool's directory. Your source is never modified.</p></details>
+    <details><summary>What happens for a tool that doesn't support a primitive?</summary><p>morf marks it and skips only that piece &mdash; everything else still installs. For example, a tool without a hooks system shows "not supported" for hooks and installs the rest normally.</p></details>
+    <details><summary>Do I need a manifest or config file?</summary><p>No. <code>morf install &lt;url&gt;</code> works with zero config. A default target and optional manifest exist for convenience, but nothing is required to start.</p></details>
+    <details><summary>Which git hosts work?</summary><p>Any. GitHub, GitLab, self-hosted &mdash; public or private. Install by full URL, or by short name once a repo is in the registry.</p></details>
+    <details><summary>Will it overwrite something I edited locally?</summary><p>No. If morf detects local changes to an installed item, it skips it and tells you to re-run with <code>--force</code> if you really want to overwrite.</p></details>
+    <details><summary>Is it really free?</summary><p>Yes &mdash; open source, MIT licensed, zero runtime dependencies. Use it, fork it, contribute back.</p></details>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="roadmap">
+  <div class="eyebrow">roadmap</div>
+  <h2>Where morf is headed.</h2>
+  <div class="road">
+    <div class="ritem"><span class="rtag done">shipped</span><span class="txt">Skills + agents conversion for Claude, OpenCode &amp; Kilo</span></div>
+    <div class="ritem"><span class="rtag now">in progress</span><span class="txt">Cursor, Copilot &amp; Windsurf targets &middot; rules, prompts, hooks &amp; MCP conversion</span></div>
+    <div class="ritem"><span class="rtag next">next</span><span class="txt">Public registry with search &amp; short-name installs</span></div>
+    <div class="ritem"><span class="rtag next">next</span><span class="txt">Lockfile &amp; <code>morf sync</code> for reproducible setups</span></div>
+    <div class="ritem"><span class="rtag next">next</span><span class="txt">Versioning &amp; tags &middot; <code>morf publish</code> flow</span></div>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Write once. <span class="grad">morf it everywhere.</span></h2>
+  <div class="install" style="display:inline-flex">
+    <code><span class="prompt">$</span> npx morf install &lt;git-url&gt;</code>
+    <button class="copy" onclick="copyInstall(this)">copy</button>
+  </div>
+</div>
+
+<footer class="wrap">
+  <svg width="30" height="24" viewBox="0 0 150 44" style="opacity:.8">
+    <defs><linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+    <rect x="0" y="6" width="30" height="30" rx="2" fill="url(#f)" opacity=".5"/>
+    <rect x="36" y="6" width="30" height="30" rx="8" fill="url(#f)" opacity=".75"/>
+    <rect x="72" y="6" width="30" height="30" rx="13" fill="url(#f)" opacity=".9"/>
+    <circle cx="135" cy="21" r="15" fill="url(#f)"/></svg>
+  <div class="foot-links"><a href="#">GitHub</a><a href="#">LinkedIn</a><a href="#">npm</a></div>
+  <div>Built by <span class="ph">[ your name ]</span> &middot; open source &middot; MIT</div>
+  <div style="margin-top:6px;color:var(--text-faint)">built for people who use more than one AI tool.</div>
+</footer>
+
+<script>
+  function copyInstall(btn){
+    navigator.clipboard && navigator.clipboard.writeText('npx morf install <git-url>');
+    var t=btn.textContent; btn.textContent='copied \u2713'; setTimeout(function(){btn.textContent=t;},1400);
+  }
+  var nav=document.getElementById('nav');
+  addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>10);});
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var outs={
+    cursor:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="k">globs</span>: <span class="v">["**/*"]</span>\n<span class="k">alwaysApply</span>: <span class="v">false</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases\u2026\n<span class="c">\u2192 .cursor/rules/bug-finder.mdc</span>',
+    kilo:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="k">mode</span>: <span class="v">subagent</span>\n<span class="k">permission</span>: <span class="v">{ bash: ask }</span>\n<span class="k">color</span>: <span class="v">"#22D3EE"</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases\u2026\n<span class="c">\u2192 ~/.kilo/agent/bug-finder.md</span>',
+    copilot:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="c"># tools mapped to</span>\n<span class="c"># copilot capabilities</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases\u2026\n<span class="c">\u2192 .github/agents/bug-finder.md</span>'
+  };
+  var baOut=document.getElementById('baOut'), baWho=document.getElementById('baWho');
+  function setBA(t){baOut.innerHTML=outs[t];baWho.textContent=t;
+    var tabs=document.querySelectorAll('.ba-tab');for(var i=0;i<tabs.length;i++){tabs[i].classList.toggle('active',tabs[i].dataset.t===t);}}
+  document.getElementById('baTabs').addEventListener('click',function(e){var b=e.target.closest('.ba-tab');if(b)setBA(b.dataset.t);});
+  setBA('cursor');
+
+  var term=document.getElementById('term');
+  var seq=[
+    {t:'cmd'},
+    {t:'spin'},
+    {t:'blank',s:''},
+    {t:'dim',s:'  morphing <span class="grad">bug-finder</span> \u2192'},
+    {t:'blank',s:''},
+    {t:'ok',s:'  <span class="tok-ok">\u2713</span>  claude     <span class="tok-path">~/.claude/agents/bug-finder.md</span>'},
+    {t:'ok',s:'  <span class="tok-ok">\u2713</span>  cursor     <span class="tok-path">.cursor/rules/bug-finder.mdc</span>'},
+    {t:'ok',s:'  <span class="tok-ok">\u2713</span>  kilo       <span class="tok-path">~/.kilo/agent/bug-finder.md</span>'},
+    {t:'warn',s:'  <span class="tok-warn">\u00b1</span>  copilot    <span class="tok-path">.github/agents/bug-finder.md</span> <span class="tok-dim">(tools mapped)</span>'},
+    {t:'ok',s:'  <span class="tok-ok">\u2713</span>  windsurf   <span class="tok-path">.devin/rules/bug-finder.md</span>'},
+    {t:'ok',s:'  <span class="tok-ok">\u2713</span>  opencode   <span class="tok-path">~/.opencode/agent/bug-finder.md</span>'},
+    {t:'blank',s:''},
+    {t:'done',s:'  <span class="grad">morfed</span> 1 agent \u2192 6 tools'}
+  ];
+  var CMD='morf install github.com/acme/bug-finder';
+  var SPIN='\u280b\u2819\u2839\u2838\u283c\u2834\u2826\u2827';
+  var timer=null;
+  function renderInstant(){
+    term.innerHTML='';
+    for(var j=0;j<seq.length;j++){var l=seq[j];var e=document.createElement('span');e.className='line';
+      if(l.t==='cmd')e.innerHTML='<span class="prompt">$</span> <span class="cmd">'+CMD+'</span>';
+      else if(l.t==='spin')e.innerHTML='  <span class="tok-ok">\u2713</span>  cloning  bug-finder <span class="tok-dim">done</span>';
+      else e.innerHTML=l.s;term.appendChild(e);}
+  }
+  function spinFor(el,ms){return new Promise(function(res){var f=0;var iv=setInterval(function(){
+    el.innerHTML='  <span class="prompt">'+SPIN[f%SPIN.length]+'</span>  cloning  bug-finder';f++;},80);
+    timer=setTimeout(function(){clearInterval(iv);el.innerHTML='  <span class="tok-ok">\u2713</span>  cloning  bug-finder <span class="tok-dim">done</span>';res();},ms);});}
+  function playTerm(){
+    if(reduce){renderInstant();return;}
+    if(timer)clearTimeout(timer);
+    term.innerHTML='';
+    var cmdLine=document.createElement('span');cmdLine.className='line';term.appendChild(cmdLine);
+    var i=0;
+    (function typeThenRest(){
+      (function type(){
+        cmdLine.innerHTML='<span class="prompt">$</span> <span class="cmd">'+CMD.slice(0,i)+'</span><span class="cursor"></span>';
+        if(i++<=CMD.length){timer=setTimeout(type,36);}
+        else{cmdLine.innerHTML='<span class="prompt">$</span> <span class="cmd">'+CMD+'</span>';
+          var spinLine=document.createElement('span');spinLine.className='line';term.appendChild(spinLine);
+          spinFor(spinLine,1250).then(function(){revealFrom(2);});}
+      })();
+    })();
+    function revealFrom(k){
+      if(k>=seq.length)return;
+      timer=setTimeout(function(){
+        var e=document.createElement('span');e.className='line';e.innerHTML=seq[k].s;term.appendChild(e);
+        revealFrom(k+1);
+      }, seq[k].t==='blank'?55:125);
+    }
+  }
+  var played=false;
+  new IntersectionObserver(function(ents){ents.forEach(function(e){if(e.isIntersecting&&!played){played=true;reduce?renderInstant():playTerm();}});},{threshold:.4})
+    .observe(document.querySelector('.term'));
+</script>
+</body>
+</html>

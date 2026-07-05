@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — morf</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A0C10;--border:#1E2430;--text:#E6E9EF;--dim:#8B93A3;--faint:#5A6172;--a:#7C3AED;--b:#22D3EE}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',ui-monospace,monospace;
+    min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px;overflow:hidden;position:relative}
+  body::before{content:"";position:fixed;top:-25%;left:50%;transform:translateX(-50%);
+    width:800px;height:520px;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(124,58,237,.16),transparent 60%);filter:blur(40px)}
+  .grad{background:linear-gradient(120deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .wrap{position:relative;z-index:1}
+  svg{width:180px;margin:0 auto 26px;display:block}
+  h1{font-size:clamp(3rem,12vw,6rem);font-weight:800;letter-spacing:-.05em;line-height:1}
+  p{color:var(--dim);margin:14px 0 6px;font-size:15px}
+  .term{color:var(--faint);font-size:13.5px;margin-bottom:28px}
+  .term .p{color:var(--b)}
+  a{display:inline-flex;align-items:center;gap:8px;color:var(--text);text-decoration:none;
+    border:1px solid var(--border);border-radius:8px;padding:11px 18px;font-size:14px;transition:.18s}
+  a:hover{border-color:var(--b)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <svg viewBox="0 0 210 60" role="img" aria-label="morf">
+      <defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+      <rect x="6" y="12" width="36" height="36" rx="3" fill="url(#h)" opacity=".5"/>
+      <rect x="52" y="12" width="36" height="36" rx="10" fill="url(#h)" opacity=".72"/>
+      <rect x="98" y="12" width="36" height="36" rx="15" fill="url(#h)" opacity=".88"/>
+      <circle cx="180" cy="30" r="18" fill="url(#h)"/>
+    </svg>
+    <h1 class="grad">404</h1>
+    <p>this route has no native format.</p>
+    <div class="term"><span class="p">$</span> morf install &lt;this-page&gt; — not found</div>
+    <a href="/">&larr; back home</a>
+  </div>
+</body>
+</html>
