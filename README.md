@@ -1,6 +1,6 @@
 # morf-site
 
-The landing page for [morf](https://github.com/romivol/morf), a CLI that installs AI skills and agents from any git repo into every AI coding tool at once, converting each into that tool's native format.
+The landing page for [morf](https://github.com/romivol/morf-source-code), a CLI that installs AI skills, agents, rules, prompts, hooks and MCP servers from any git repo into seven AI coding tools (Claude Code, OpenCode, Kilo, Codex, Cursor, Copilot, Windsurf), converting each into that tool's native format. Describes morf 2.0.0.
 
 Live at **[morf.tools](https://morf.tools)**.
 

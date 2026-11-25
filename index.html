@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"morf","applicationCategory":"DeveloperApplication","operatingSystem":"Node.js >= 18","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Open-source CLI that installs AI agent primitives from any git repo into every AI coding tool at once - converting each into the tool's native format.","license":"https://opensource.org/licenses/MIT"}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"morf","applicationCategory":"DeveloperApplication","operatingSystem":"Node.js >= 18","softwareVersion":"2.0.0","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Open-source CLI that installs AI agent primitives from any git repo into every AI coding tool at once - converting each into the tool's native format.","license":"https://opensource.org/licenses/MIT"}
 </script>
 <style>
   :root{
@@ -159,7 +159,7 @@
   .feat{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:30px}
   .fcard{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;
     grid-column:span 2;display:flex;flex-direction:column}
-  .fcard.big{grid-column:span 3}
+  .fcard.big,.fcard.half{grid-column:span 3}
   .fcard.wide{grid-column:span 6;flex-direction:row;align-items:center;gap:20px;padding:16px 22px}
   .fcard.wide .sl{margin-bottom:0}
   .fcard.wide h3{margin-bottom:0;white-space:nowrap}
@@ -185,10 +185,21 @@
   .row-hi td{background:var(--accent-glow)}
   .row-hi td:first-child{font-weight:700}
   .legend{margin-top:14px;font-size:.85rem;color:var(--text-faint);font-family:var(--sans)}
+  .legend a,.note a{text-decoration:underline;text-underline-offset:3px}
+  .legend a:hover,.note a:hover{color:var(--text)}
+  .note{margin-top:10px;font-size:.85rem;color:var(--text-dim);font-family:var(--sans);max-width:760px;line-height:1.55}
+  .note code{font-family:var(--mono);color:var(--text);font-size:.92em}
+  .tbl td small{display:block;font-family:var(--sans);font-size:10.5px;color:var(--text-faint);line-height:1.25}
+  .code{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-top:26px;
+    font-size:13.5px;line-height:1.75;overflow-x:auto;color:var(--text)}
+  .code .p{color:var(--accent)} .code .c{color:var(--text-faint)}
+  .lead .inline-link{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+  .lead .inline-link:hover{color:var(--accent-brt)}
+  .proj-note{margin-top:14px;font-family:var(--sans);font-size:.9rem;color:var(--text-faint)}
 
   .cmds{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
   .cmdrow{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;padding:14px 16px;position:relative}
-  .cmdrow code{font-size:13.5px;color:var(--text);display:inline-block;padding-right:62px}
+  .cmdrow code{font-size:13.5px;color:var(--text);display:inline-block;padding-right:62px;word-break:break-word}
   .cmd-copy{position:absolute;top:12px;right:12px}
   .cmdrow code .p{color:var(--accent)}
   .cmdrow .d{font-family:var(--sans);font-size:12.5px;color:var(--text-faint);margin-top:5px}
@@ -287,7 +298,8 @@
   .reveal-on .feat.in .fcard,.reveal-on .cases.in .case{animation:rise .5s ease forwards}
   .feat.in .fcard:nth-child(2){animation-delay:.06s}.feat.in .fcard:nth-child(3){animation-delay:.12s}
   .feat.in .fcard:nth-child(4){animation-delay:.18s}.feat.in .fcard:nth-child(5){animation-delay:.24s}
-  .feat.in .fcard:nth-child(6){animation-delay:.3s}
+  .feat.in .fcard:nth-child(6){animation-delay:.3s}.feat.in .fcard:nth-child(7){animation-delay:.36s}
+  .feat.in .fcard:nth-child(8){animation-delay:.42s}
   .cases.in .case:nth-child(2){animation-delay:.08s}.cases.in .case:nth-child(3){animation-delay:.16s}
 
   /* --- card hover --- */
@@ -302,7 +314,7 @@
 
   @media(max-width:860px){
     .feat{grid-template-columns:repeat(2,1fr)}
-    .fcard,.fcard.big,.fcard.wide{grid-column:span 1}
+    .fcard,.fcard.big,.fcard.half,.fcard.wide{grid-column:span 1}
     .fcard.wide{flex-direction:column;align-items:flex-start;gap:8px}
     .fcard.wide h3{white-space:normal}
   }
@@ -324,6 +336,7 @@
     .nav-links a.here:not(.nav-cta)::after{display:none}
     .nav-cta{text-align:center;margin-top:4px}
     .install{flex-direction:column;align-items:stretch;gap:10px;text-align:left}
+    .term-body{font-size:12px;white-space:pre;overflow-x:auto}
     .step{flex-wrap:wrap}.step .desc{margin-left:0;text-align:left;width:100%}
   }
   @media(prefers-reduced-motion:reduce){
@@ -356,7 +369,7 @@
     <a href="#compare">compare</a>
     <a href="#commands">commands</a>
     <a href="#faq">faq</a>
-    <a href="https://github.com/romivol/morf" class="nav-cta" target="_blank" rel="noopener">GitHub &#9733;</a>
+    <a href="https://github.com/romivol/morf-source-code" class="nav-cta" target="_blank" rel="noopener">GitHub &#9733;</a>
   </div>
 </div></nav>
 
@@ -374,10 +387,10 @@
     <code><span class="prompt">$</span> npm i -g @romivol/morf</code>
     <button class="copy" onclick="copyInstall(this)" aria-label="copy install command">copy</button>
   </div>
-  <div><a class="ghlink" href="https://github.com/romivol/morf" target="_blank" rel="noopener">View on GitHub &rarr;</a></div>
+  <div><a class="ghlink" href="https://github.com/romivol/morf-source-code" target="_blank" rel="noopener">View on GitHub &rarr;</a></div>
   <div class="tools-strip">
     <span><i class="d"></i>Claude</span><span><i class="d"></i>Cursor</span><span><i class="d"></i>Kilo</span>
-    <span><i class="d"></i>Copilot</span><span><i class="d"></i>Windsurf</span><span><i class="d"></i>OpenCode</span>
+    <span><i class="d"></i>Copilot</span><span><i class="d"></i>Windsurf</span><span><i class="d"></i>OpenCode</span><span><i class="d"></i>Codex</span>
   </div>
 </header>
 
@@ -403,7 +416,7 @@
 <section class="wrap" id="convert">
   <div class="eyebrow-cmd"><span class="hash">#</span> conversion</div>
   <h2>The same agent, reshaped for each tool.</h2>
-  <p class="lead">Others copy your file as-is and hope it works. morf rewrites the frontmatter, permissions and paths into each tool's own format. Pick a target to see what morf produces:</p>
+  <p class="lead">morf rewrites the frontmatter, tool lists and paths into each tool's own format instead of copying the file as-is. Pick a target to see what morf produces:</p>
   <div class="ba-tabs" id="baTabs">
     <button class="ba-tab active" data-t="cursor">&rarr; cursor</button>
     <button class="ba-tab" data-t="kilo">&rarr; kilo</button>
@@ -435,11 +448,13 @@ errors and edge cases&hellip;</pre>
   <div class="eyebrow-cmd"><span class="hash">#</span> features</div>
   <h2>Built to move between tools.</h2>
   <div class="feat">
-    <div class="fcard big"><div class="sl"><span class="sym">✓</span><span class="flag">convert</span><span>rewrites, doesn't copy</span></div><h3>Real format conversion</h3><p>Frontmatter, permissions, event names and paths are rewritten per tool &mdash; the only manager that truly adapts agents.</p></div>
+    <div class="fcard big"><div class="sl"><span class="sym">✓</span><span class="flag">convert</span><span>native format per tool</span></div><h3>Real format conversion</h3><p>Agents, rules, prompts, hooks and MCP servers are rewritten into each tool's own format: frontmatter, tool lists, event names and paths.</p></div>
     <div class="fcard big"><div class="sl"><span class="sym">✓</span><span class="flag">primitives</span><span>skills · agents · rules · prompts · hooks · mcp</span></div><h3>Every primitive</h3><p>Not just rules, not just skills &mdash; all of it, each written to the shape its tool expects.</p></div>
-    <div class="fcard"><div class="sl"><span class="sym">↝</span><span class="flag">targets</span></div><h3>Every major tool</h3><p>Claude, Cursor, Kilo, Copilot, Windsurf and OpenCode &mdash; install to one, several, or all at once.</p></div>
-    <div class="fcard"><div class="sl"><span class="sym">±</span><span class="flag">no-config</span></div><h3>Zero config</h3><p>No manifest to learn. <code>morf install &lt;url&gt;</code> and you're done. A manifest is optional, never required.</p></div>
-    <div class="fcard"><div class="sl"><span class="sym">⎇</span><span class="flag">any-host</span></div><h3>Any git host</h3><p>GitHub, GitLab, or any git URL &mdash; public or private. Install by URL or short name.</p></div>
+    <div class="fcard"><div class="sl"><span class="sym">↝</span><span class="flag">targets</span></div><h3>Every major tool</h3><p>Claude, Cursor, Kilo, Copilot, Windsurf, OpenCode and Codex &mdash; install to one, several, or all at once.</p></div>
+    <div class="fcard"><div class="sl"><span class="sym">±</span><span class="flag">no-config</span></div><h3>Zero config</h3><p>No setup to learn. <code>morf install &lt;url&gt;</code> and you're done. A project file is optional, for when a team wants the same setup everywhere.</p></div>
+    <div class="fcard"><div class="sl"><span class="sym">⎇</span><span class="flag">any-host</span></div><h3>Any git host</h3><p>GitHub, GitLab or any git server, public or private, over https or ssh.</p></div>
+    <div class="fcard half"><div class="sl"><span class="sym">↻</span><span class="flag">reproducible</span><span>morf.json + morf.lock.json</span></div><h3>Reproducible</h3><p>Pin the exact commit and content hash of everything a project uses. <code>morf sync</code> gives every teammate and CI the same setup.</p></div>
+    <div class="fcard half"><div class="sl"><span class="sym">?</span><span class="flag">approval</span><span>plan first, then ask</span></div><h3>Nothing runs unasked</h3><p>Every change is shown as a plan first. Hooks and MCP servers, which run commands, are listed with what they run and need their own confirmation.</p></div>
     <div class="fcard wide"><div class="sl"><span class="sym">✓</span><span class="flag">MIT</span></div><h3>Open source</h3><p>Zero runtime dependencies. Auditable, forkable, and yours.</p></div>
   </div>
 </section>
@@ -460,18 +475,32 @@ errors and edge cases&hellip;</pre>
   </div>
   <div class="tblwrap">
   <table class="tbl">
-    <thead><tr><th>primitive</th><th>claude</th><th>cursor</th><th>kilo</th><th>copilot</th><th>windsurf</th><th>opencode</th></tr></thead>
+    <thead><tr><th>primitive</th><th>claude</th><th>cursor</th><th>kilo</th><th>copilot</th><th>windsurf</th><th>opencode</th><th>codex</th></tr></thead>
     <tbody>
-      <tr><td>Skills</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
-      <tr class="row-hi"><td>Agents</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-      <tr><td>Rules</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="route">&#8605;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="route">&#8605;</td></tr>
-      <tr><td>Prompts</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-      <tr><td>Hooks</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-      <tr><td>MCP</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
+      <tr><td>Skills</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
+      <tr class="row-hi"><td>Agents</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>Rules</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="route">&#8605;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
+      <tr><td>Prompts</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;<small>global only</small></td></tr>
+      <tr><td>Hooks</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      <tr><td>MCP</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td><td class="route">&#8605;</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="legend">&#10003; converted &nbsp;&middot;&nbsp; &#8605; routed &nbsp;&middot;&nbsp; &mdash; not supported by tool</div>
+  <div class="legend">&#10003; converted &nbsp;&middot;&nbsp; &#8605; routed (copied or merged into the tool's own file) &nbsp;&middot;&nbsp; <em>global only</em> = skipped in a project</div>
+  <p class="note"><b>Codex has no project-level prompts</b>, so morf skips them in a project and says so in the plan. They still install globally, to <code>~/.codex/prompts/</code>.</p>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="projects">
+  <div class="eyebrow-cmd"><span class="hash">#</span> projects</div>
+  <h2>The same setup, on every machine.</h2>
+  <p class="lead">A project pins what it uses in <code>morf.json</code>. <code>morf.lock.json</code> records the exact commit and a content hash of each item. Commit both, then run <code>morf sync</code> anywhere.</p>
+  <pre class="code"><span class="p">$</span> morf init
+<span class="p">$</span> morf install github.com/acme/agents --agent bug-finder --target claude cursor
+<span class="p">$</span> git add morf.json morf.lock.json
+<span class="c"># on another machine, or in CI</span>
+<span class="p">$</span> morf sync</pre>
+  <p class="proj-note">Hashes are computed the same way on Windows, macOS and Linux, so a lockfile written on one verifies on the others.</p>
 </section>
 <div class="divider"></div>
 
@@ -485,6 +514,13 @@ errors and edge cases&hellip;</pre>
     <div class="cmdrow"><code><span class="p">$</span> morf list --all</code><button class="copy cmd-copy" data-cmd="morf list --all" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">see what's installed, in every tool</div></div>
     <div class="cmdrow"><code><span class="p">$</span> morf update --all</code><button class="copy cmd-copy" data-cmd="morf update --all" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">pull latest for everything you installed</div></div>
     <div class="cmdrow"><code><span class="p">$</span> morf config default &lt;tool&gt;</code><button class="copy cmd-copy" data-cmd="morf config default <tool>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">set your primary target once</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf init</code><button class="copy cmd-copy" data-cmd="morf init" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">start a project: creates morf.json</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf sync</code><button class="copy cmd-copy" data-cmd="morf sync" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">install exactly what the lockfile pins</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf sync --check</code><button class="copy cmd-copy" data-cmd="morf sync --check" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">change nothing; exit 1 if the project has drifted</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf sync --frozen --yes</code><button class="copy cmd-copy" data-cmd="morf sync --frozen --yes" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">for CI: never rewrites the lockfile</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf install &lt;repo&gt; --mcp &lt;name&gt; --hook &lt;name&gt;</code><button class="copy cmd-copy" data-cmd="morf install <repo> --mcp <name> --hook <name>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">install an MCP server and a hook set</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf install &lt;repo&gt; --dry-run</code><button class="copy cmd-copy" data-cmd="morf install <repo> --dry-run" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">show the plan, write nothing</div></div>
+    <div class="cmdrow"><code><span class="p">$</span> morf uninstall --agent &lt;name&gt;</code><button class="copy cmd-copy" data-cmd="morf uninstall --agent <name>" onclick="copyCmd(this)" aria-label="copy command">copy</button><div class="d">remove an item from every tool it is in</div></div>
   </div>
 </section>
 <div class="divider"></div>
@@ -494,7 +530,7 @@ errors and edge cases&hellip;</pre>
   <h2>Made for people who switch tools.</h2>
   <div class="cases">
     <div class="case"><div class="q">"I built a great agent in Claude - now I want it in Cursor too."</div><div class="a">One command. <span class="wm">morf</span> reshapes its frontmatter and drops it in, correctly.</div></div>
-    <div class="case"><div class="q">"Our team uses three different AI tools and everyone's config drifts."</div><div class="a">Install from one repo to <span class="grad">all tools</span> &mdash; the same source, converted for each.</div></div>
+    <div class="case"><div class="q">"Our team uses three different AI tools and everyone's config drifts."</div><div class="a">Pin it once in <code>morf.json</code>. <code>morf sync</code> gives everyone the same agents, rules and MCP servers, converted for whichever tool they use.</div></div>
     <div class="case"><div class="q">"I keep a personal library of skills and rules I reuse everywhere."</div><div class="a">Keep them in one git repo. <span class="wm">morf</span> installs them anywhere in seconds.</div></div>
   </div>
 </section>
@@ -508,13 +544,11 @@ errors and edge cases&hellip;</pre>
     <thead><tr><th></th><th>multi-tool</th><th>converts agents</th><th>all primitives</th><th>zero-config</th><th>any git host</th></tr></thead>
     <tbody>
       <tr class="row-hi"><td>morf</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-      <tr><td>APM</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
-      <tr><td>Ruler</td><td class="yes">&#10003;</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
       <tr><td>copy-paste by hand</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="lead" style="margin-top:18px">Ruler does rules. APM does packaging. <span class="wm">morf</span> <span class="grad" style="font-weight:700">does all of it</span> &mdash; and it's the only one that actually converts your agents.</p>
+  <p class="lead" style="margin-top:18px"><span class="wm">morf</span> <span class="grad" style="font-weight:700">converts each agent into every tool's own format</span> &mdash; and installs skills, rules, prompts, hooks and MCP servers the same way.</p>
 </section>
 <div class="divider"></div>
 
@@ -522,12 +556,15 @@ errors and edge cases&hellip;</pre>
   <div class="eyebrow-cmd"><span class="hash">#</span> faq</div>
   <h2>Good to know.</h2>
   <div class="faq">
-    <details><summary>Does morf change my original files?</summary><p>No. morf reads your source repo and writes converted copies into each tool's directory. Your source is never modified.</p></details>
-    <details><summary>What happens for a tool that doesn't support a primitive?</summary><p>morf marks it and skips only that piece &mdash; everything else still installs. For example, a tool without a hooks system shows "not supported" for hooks and installs the rest normally.</p></details>
-    <details><summary>Do I need a manifest or config file?</summary><p>No. <code>morf install &lt;url&gt;</code> works with zero config. A default target and optional manifest exist for convenience, but nothing is required to start.</p></details>
-    <details><summary>Which git hosts work?</summary><p>Any. GitHub, GitLab, self-hosted &mdash; public or private. Install by full URL, or by short name once a repo is in the registry.</p></details>
+    <details><summary>Does morf change my original files?</summary><p>No. morf reads your source repo and writes converted copies into each tool's directory. Your source is never modified. In config files you also edit, such as <code>settings.json</code> or <code>.mcp.json</code>, morf adds and removes only its own entries.</p></details>
+    <details><summary>What happens for a tool that doesn't support a primitive?</summary><p>morf marks it and skips only that piece &mdash; everything else still installs. For example, Codex has no project-level prompts, so in a project morf skips them, says so in the plan, and installs the rest normally.</p></details>
+    <details><summary>Do I need a config file?</summary><p>No. <code>morf install &lt;url&gt;</code> works with nothing set up. A project file (<code>morf.json</code>) is optional, for teams that want a pinned, shared setup.</p></details>
+    <details><summary>Which git hosts work?</summary><p>Any git server, public or private: GitHub, GitLab, self-hosted. Use an https or ssh address. Plain <code>http://</code> and <code>git://</code> addresses are not accepted.</p></details>
     <details><summary>Will it overwrite something I edited locally?</summary><p>No. If morf detects local changes to an installed item, it skips it and tells you to re-run with <code>--force</code> if you really want to overwrite.</p></details>
-    <details><summary>What happens when a repo updates?</summary><p>Re-run <code>morf install &lt;url&gt;</code> to pull the latest version. morf updates installed items in place, skips anything you've edited locally, and leaves everything else untouched.</p></details>
+    <details><summary>What happens when a repo updates?</summary><p>Run <code>morf update</code>. It pulls the latest version of what you installed, skips anything you edited locally, and leaves the rest untouched. In a project it also rewrites the lockfile.</p></details>
+    <details><summary>What is the lockfile for?</summary><p><code>morf.json</code> says what a project wants, for example the main branch of a repo. <code>morf.lock.json</code> records what that resolved to: the exact commit and a hash of each item. Two people who sync a week apart get the same files.</p></details>
+    <details><summary>Is it safe to sync a project someone else set up?</summary><p>morf shows the full plan before changing anything and asks first. Hooks and MCP servers are listed with the commands they run and need a second confirmation. In CI nothing installs without <code>--yes</code>, and hooks and MCP servers also need <code>--allow-exec</code>.</p></details>
+    <details><summary>I'm on 1.x. What changes when I upgrade?</summary><p>Your installed items are left as they are and nothing is rewritten, but a few defaults change; see <a href="https://github.com/romivol/morf-source-code/blob/main/CHANGELOG.md#upgrading-from-112" target="_blank" rel="noopener" style="text-decoration:underline">Upgrading from 1.1.2</a> in the changelog.</p></details>
   </div>
 </section>
 <div class="divider"></div>
@@ -536,12 +573,19 @@ errors and edge cases&hellip;</pre>
   <div class="eyebrow-cmd"><span class="hash">#</span> roadmap</div>
   <h2>Where morf is headed.</h2>
   <div class="road">
-    <div class="ritem"><span class="rtag done">shipped</span><span class="txt">Skills + agents conversion for Claude, OpenCode &amp; Kilo</span></div>
-    <div class="ritem"><span class="rtag now">in progress</span><span class="txt">Cursor, Copilot &amp; Windsurf targets &middot; rules, prompts, hooks &amp; MCP conversion</span></div>
-    <div class="ritem"><span class="rtag next">next</span><span class="txt">Public registry with search &amp; short-name installs</span></div>
-    <div class="ritem"><span class="rtag next">next</span><span class="txt">Lockfile &amp; <code>morf sync</code> for reproducible setups</span></div>
-    <div class="ritem"><span class="rtag next">next</span><span class="txt">Versioning &amp; tags &middot; <code>morf publish</code> flow</span></div>
+    <div class="ritem"><span class="rtag done">shipped</span><span class="txt">Skills, agents, rules, prompts, hooks and MCP servers for seven tools</span></div>
+    <div class="ritem"><span class="rtag done">shipped</span><span class="txt">Project mode: <code>morf.json</code>, <code>morf.lock.json</code> and <code>morf sync</code></span></div>
+    <div class="ritem"><span class="rtag next">next</span><span class="txt">Public registry with search and short-name installs</span></div>
+    <div class="ritem"><span class="rtag next">next</span><span class="txt">A user-level lockfile for a personal global setup</span></div>
+    <div class="ritem"><span class="rtag next">next</span><span class="txt"><code>morf publish</code></span></div>
   </div>
+</section>
+<div class="divider"></div>
+
+<section class="wrap" id="feedback">
+  <div class="eyebrow-cmd"><span class="hash">#</span> feedback</div>
+  <h2>Found a bug? Got an idea?</h2>
+  <p class="lead">morf is open source and early. If something doesn't work in your tool, or you want a tool or a feature added, <a class="inline-link" href="https://github.com/romivol/morf-source-code/issues" target="_blank" rel="noopener">open an issue</a>.</p>
 </section>
 
 <div class="cta">
@@ -558,7 +602,7 @@ errors and edge cases&hellip;</pre>
     <rect x="36" y="6" width="30" height="30" rx="8" fill="#3BE47B" opacity=".68"/>
     <rect x="72" y="6" width="30" height="30" rx="13" fill="#3BE47B" opacity=".85"/>
     <circle cx="135" cy="21" r="15" fill="#3BE47B"/></svg>
-  <div class="foot-links"><a href="https://github.com/romivol/morf" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/romivolkovich" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.npmjs.com/package/@romivol/morf" target="_blank" rel="noopener">npm</a></div>
+  <div class="foot-links"><a href="https://github.com/romivol/morf-source-code" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/romivolkovich" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.npmjs.com/package/@romivol/morf" target="_blank" rel="noopener">npm</a></div>
   <div>Built by <span class="ph">Romi Volkovich</span> &middot; open source &middot; MIT</div>
   <div style="margin-top:6px;color:var(--text-faint)">built for people who use more than one AI tool.</div>
 </footer>
@@ -621,9 +665,9 @@ errors and edge cases&hellip;</pre>
   }
 
   var outs={
-    cursor:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="k">globs</span>: <span class="v">["**/*"]</span>\n<span class="k">alwaysApply</span>: <span class="v">false</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ .cursor/rules/bug-finder.mdc</span>',
-    kilo:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="k">mode</span>: <span class="v">subagent</span>\n<span class="k">permission</span>: <span class="v">{ bash: ask }</span>\n<span class="k">color</span>: <span class="v">"#3BE47B"</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ ~/.kilo/agent/bug-finder.md</span>',
-    copilot:'<span class="c">---</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="c"># tools mapped to</span>\n<span class="c"># copilot capabilities</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ .github/agents/bug-finder.md</span>'
+    cursor:'<span class="c">---</span>\n<span class="k">name</span>: <span class="v">bug-finder</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="c"># tools: Read, Grep, Bash</span>\n<span class="c"># model: sonnet</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ .cursor/agents/bug-finder.md</span>',
+    kilo:'<span class="c">---</span>\n<span class="k">name</span>: <span class="v">bug-finder</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="k">tools</span>:\n  <span class="k">read</span>: <span class="v">true</span>\n  <span class="k">grep</span>: <span class="v">true</span>\n  <span class="k">bash</span>: <span class="v">true</span>\n  <span class="k">write</span>: <span class="v">false</span>  <span class="c"># …and the rest false</span>\n<span class="c"># model: sonnet</span>\n<span class="k">mode</span>: <span class="v">subagent</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ ~/.kilo/agent/bug-finder.md</span>',
+    copilot:'<span class="c">---</span>\n<span class="k">name</span>: <span class="v">bug-finder</span>\n<span class="k">description</span>: <span class="v">Finds bugs</span>\n<span class="k">tools</span>: <span class="v">[\'read\', \'search\', \'execute\']</span>\n<span class="c"># model: sonnet</span>\n<span class="c">---</span>\n<span class="c"># Bug Finder</span>\nReviews diffs for logic\nerrors and edge cases…\n<span class="c">→ .github/agents/bug-finder.md</span>'
   };
   var baOut=document.getElementById('baOut'), baWho=document.getElementById('baWho');
   var baFlag=document.getElementById('baFlag');
@@ -636,31 +680,30 @@ errors and edge cases&hellip;</pre>
   var seq=[
     {t:'cmd'},
     {t:'spin'},
+    {t:'dim',s:'  <span class="tok-dim">TARGET    NAME        STATUS</span>'},
+    {t:'ok',s:'  opencode  bug-finder  <span class="tok-warn">±</span>   <span class="tok-dim">adapted for opencode: tools; added mode; commented model</span>'},
+    {t:'ok',s:'  claude    bug-finder  <span class="tok-ok">✓</span>'},
+    {t:'ok',s:'  kilo      bug-finder  <span class="tok-warn">±</span>   <span class="tok-dim">adapted for kilo: tools; added mode; commented model</span>'},
+    {t:'ok',s:'  cursor    bug-finder  <span class="tok-warn">±</span>   <span class="tok-dim">adapted for cursor: commented model; commented tools</span>'},
+    {t:'ok',s:'  copilot   bug-finder  <span class="tok-warn">±</span>   <span class="tok-dim">adapted for copilot: tools mapped; commented model</span>'},
+    {t:'ok',s:'  codex     bug-finder  <span class="tok-warn">±</span>   <span class="tok-dim">adapted for codex: converted to TOML; dropped tools</span>'},
+    {t:'ok',s:'  windsurf  bug-finder  <span class="tok-warn">±</span>   <span class="tok-dim">adapted for windsurf: tools mapped; commented model</span>'},
     {t:'blank',s:''},
-    {t:'dim',s:'  morphing <span class="grad">bug-finder</span> →'},
-    {t:'blank',s:''},
-    {t:'ok',s:'  <span class="tok-ok">✓</span>  claude     <span class="tok-path">~/.claude/agents/bug-finder.md</span>'},
-    {t:'ok',s:'  <span class="tok-ok">✓</span>  cursor     <span class="tok-path">.cursor/rules/bug-finder.mdc</span>'},
-    {t:'ok',s:'  <span class="tok-ok">✓</span>  kilo       <span class="tok-path">~/.kilo/agent/bug-finder.md</span>'},
-    {t:'warn',s:'  <span class="tok-warn">±</span>  copilot    <span class="tok-path">.github/agents/bug-finder.md</span> <span class="tok-dim">(tools mapped)</span>'},
-    {t:'ok',s:'  <span class="tok-ok">✓</span>  windsurf   <span class="tok-path">.devin/rules/bug-finder.md</span>'},
-    {t:'ok',s:'  <span class="tok-ok">✓</span>  opencode   <span class="tok-path">~/.opencode/agent/bug-finder.md</span>'},
-    {t:'blank',s:''},
-    {t:'done',s:'  <span class="bloom">morfed</span> 1 agent → 6 tools'}
+    {t:'done',s:'  <span class="bloom">Installed 7.</span>'}
   ];
-  var CMD='morf install github.com/acme/bug-finder';
+  var CMD='morf install github.com/acme/agents --agent bug-finder --target all';
   var SPIN='⠋⠙⠹⠸⠼⠴⠦⠧';
   var timer=null;
   function renderInstant(){
     term.innerHTML='';
     for(var j=0;j<seq.length;j++){var l=seq[j];var e=document.createElement('span');e.className='line';
       if(l.t==='cmd')e.innerHTML='<span class="prompt">$</span> <span class="cmd">'+CMD+'</span>';
-      else if(l.t==='spin')e.innerHTML='  <span class="tok-ok">✓</span>  cloning  bug-finder <span class="tok-dim">done</span>';
+      else if(l.t==='spin')e.innerHTML='<span class="tok-dim">Cloning github.com/acme/agents...</span>';
       else e.innerHTML=l.s;term.appendChild(e);}
   }
   function spinFor(el,ms){return new Promise(function(res){var f=0;var iv=setInterval(function(){
-    el.innerHTML='  <span class="prompt">'+SPIN[f%SPIN.length]+'</span>  cloning  bug-finder';f++;},80);
-    timer=setTimeout(function(){clearInterval(iv);el.innerHTML='  <span class="tok-ok">✓</span>  cloning  bug-finder <span class="tok-dim">done</span>';res();},ms);});}
+    el.innerHTML='<span class="prompt">'+SPIN[f%SPIN.length]+'</span> <span class="tok-dim">Cloning github.com/acme/agents...</span>';f++;},80);
+    timer=setTimeout(function(){clearInterval(iv);el.innerHTML='<span class="tok-dim">Cloning github.com/acme/agents...</span>';res();},ms);});}
   function playTerm(){
     if(reduce){renderInstant();return;}
     if(timer)clearTimeout(timer);

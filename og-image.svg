@@ -19,5 +19,5 @@
   </g>
   <text x="600" y="360" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="92" font-weight="800" letter-spacing="2" fill="url(#bloom)">morf</text>
   <text x="600" y="430" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="38" font-weight="700" fill="#DCE6DA">one agent, every tool</text>
-  <text x="600" y="490" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="24" fill="#8B968A">install AI agents into every coding tool — converted, not copied.</text>
+  <text x="600" y="490" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="24" fill="#8B968A">every primitive, in each tool’s own format.</text>
 </svg>
